@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Plus Minus Board</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="top">
+      <div class="brand">
+        <div id="title" class="title" role="button" tabindex="0" aria-label="Plus Minus Board">Plus Minus Board</div>
+        <div class="sub">Tap the title 7x for admin</div>
+      </div>
+      <div class="status" id="status">Offline</div>
+    </header>
+
+    <!-- MAIN -->
+    <section class="screen" id="screen-main">
+      <h1 class="h1">Plus or Minus?</h1>
+      <div class="pm">
+        <button class="big minus" id="btn-minus" aria-label="Minus">−</button>
+        <button class="big plus" id="btn-plus" aria-label="Plus">+</button>
+      </div>
+      <button class="link" id="btn-scores">SCORES</button>
+    </section>
+
+    <!-- PEOPLE -->
+    <section class="screen hidden" id="screen-people">
+      <h1 class="h1">People</h1>
+      <div class="grid" id="people-grid"></div>
+      <button class="link" id="btn-people-back">Back</button>
+    </section>
+
+    <!-- STORY -->
+    <section class="screen hidden" id="screen-story">
+      <h1 class="h1" id="story-title">Story</h1>
+      <div class="card">
+        <label class="label" for="story">What happened?</label>
+        <textarea id="story" rows="5" placeholder="Enter the story…"></textarea>
+        <button class="primary" id="btn-submit">SUBMIT</button>
+      </div>
+      <button class="link" id="btn-story-back">Back</button>
+    </section>
+
+    <!-- SPLASH -->
+    <section class="screen hidden" id="screen-splash">
+      <div class="splash" id="splash-text">PLUS!</div>
+    </section>
+
+    <!-- SCORES -->
+    <section class="screen hidden" id="screen-scores">
+      <h1 class="h1">Scores</h1>
+      <div class="grid" id="scores-grid"></div>
+      <button class="link" id="btn-scores-back">Back</button>
+    </section>
+
+    <!-- USER -->
+    <section class="screen hidden" id="screen-user">
+      <div class="userTop">
+        <h1 class="h1" id="user-name">NAME</h1>
+        <div class="score" id="user-score">0</div>
+      </div>
+      <div class="card">
+        <div class="label">Stories</div>
+        <ul class="stories" id="user-stories"></ul>
+      </div>
+      <button class="home" id="btn-home" aria-label="Home">⌂</button>
+    </section>
+
+    <!-- ADMIN -->
+    <section class="modal hidden" id="modal-admin" aria-modal="true" role="dialog">
+      <div class="modalCard">
+        <div class="modalTitle">Admin</div>
+        <div class="modalBody">
+          <div class="label">Reset one person</div>
+          <select id="admin-person"></select>
+          <button class="danger" id="admin-reset-person">Reset Person</button>
+          <hr class="hr"/>
+          <button class="danger" id="admin-reset-all">Reset ALL</button>
+          <div class="small">Warning: this deletes stories.</div>
+        </div>
+        <div class="modalBtns">
+          <button class="link" id="admin-close">Close</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
