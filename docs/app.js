@@ -80,6 +80,15 @@ function requireConfig(){
   return true;
 }
 
+function configHint(){
+  try{
+    const u = new URL(SUPABASE_URL);
+    return u.host;
+  } catch {
+    return SUPABASE_URL || '(empty)';
+  }
+}
+
 // --- supabase ---
 let supabase = null;
 function initSupabase(){
@@ -90,15 +99,22 @@ function initSupabase(){
 
 async function ping(){
   if(!supabase){
-    statusEl.textContent = 'Offline';
+    statusEl.textContent = `Offline (${configHint()})`;
     return false;
   }
   try{
     const { error } = await supabase.from('people').select('name').limit(1);
-    statusEl.textContent = error ? 'Offline' : 'Online';
-    return !error;
-  } catch {
-    statusEl.textContent = 'Offline';
+    if(error){
+      statusEl.textContent = `Offline (${configHint()})`;
+      console.warn('Supabase ping error:', error);
+      return false;
+    }
+    statusEl.textContent = `Online (${configHint()})`;
+    return true;
+  } catch (e){
+    const msg = (e && e.message) ? e.message : String(e);
+    statusEl.textContent = `Offline (${configHint()})`;
+    console.warn('Supabase ping threw:', e);
     return false;
   }
 }
@@ -355,6 +371,13 @@ if(supabase){
       statusEl.textContent = 'Offline';
     });
   setInterval(() => ping().catch(() => {}), 8000);
+
+  // If we can't reach Supabase, show a one-time hint.
+  ping().then((ok) => {
+    if(!ok){
+      console.warn('Supabase unreachable. Check: config.js values, RLS policies, network/adblock, and hard-refresh GitHub Pages.');
+    }
+  });
 }
 
 show('main');
