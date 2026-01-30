@@ -44,6 +44,13 @@ const storyTitle = document.getElementById('story-title');
 const storyBox = document.getElementById('story');
 const btnSubmit = document.getElementById('btn-submit');
 
+// Mobile UX: ensure textarea stays visible above keyboard
+storyBox.addEventListener('focus', () => {
+  setTimeout(() => {
+    try { storyBox.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch {}
+  }, 250);
+});
+
 const splashText = document.getElementById('splash-text');
 
 const userNameEl = document.getElementById('user-name');
