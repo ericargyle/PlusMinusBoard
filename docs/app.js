@@ -89,9 +89,18 @@ function initSupabase(){
 }
 
 async function ping(){
-  if(!supabase) return;
-  const { error } = await supabase.from('people').select('name').limit(1);
-  statusEl.textContent = error ? 'Offline' : 'Online';
+  if(!supabase){
+    statusEl.textContent = 'Offline';
+    return false;
+  }
+  try{
+    const { error } = await supabase.from('people').select('name').limit(1);
+    statusEl.textContent = error ? 'Offline' : 'Online';
+    return !error;
+  } catch {
+    statusEl.textContent = 'Offline';
+    return false;
+  }
 }
 
 async function ensurePeopleSeeded(){
@@ -256,6 +265,19 @@ btnSubmit.addEventListener('click', async () => {
     storyBox.focus();
     return;
   }
+  if(!supabase){
+    alert('Not connected to Supabase yet (missing config or offline).');
+    return;
+  }
+
+  const ok = await ping();
+  if(!ok){
+    alert(
+      'Submit failed: Offline.\n\nIf you just updated config.js, hard refresh the page (Ctrl+F5) or open in an incognito tab.\n\nAlso confirm your Supabase project is running and schema.sql succeeded.'
+    );
+    return;
+  }
+
   try{
     btnSubmit.disabled = true;
     await addEvent(pendingPerson, pendingDelta, story);
@@ -272,7 +294,9 @@ btnSubmit.addEventListener('click', async () => {
       show('main');
     }, 2000);
   } catch (e){
-    alert('Submit failed: ' + (e?.message || e));
+    console.error(e);
+    const msg = e?.message || String(e);
+    alert('Submit failed: ' + msg + '\n\n(See console for details)');
   } finally {
     btnSubmit.disabled = false;
   }

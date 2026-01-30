@@ -109,6 +109,7 @@ textarea{
   font-size: 16px;
   text-align:center;
   cursor:pointer;
+  color: var(--text);
 }
 .person small{display:block; color: var(--muted); font-weight:700; margin-top: 6px;}
 
